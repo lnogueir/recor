@@ -6,10 +6,7 @@ import os
 
 
 server = Flask(
-    __name__, 
-    static_url_path='', 
-    static_folder='client/static', 
-    template_folder='client/templates'
+    __name__ 
 )
 
 server.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('COCKROACH_DB_URL') 
@@ -30,4 +27,4 @@ if __name__ == '__main__':
     server.register_blueprint(api)
     server.register_blueprint(routes)
 
-    socketio.run(server, debug=True)
+    socketio.run(server, debug=True,  host='0.0.0.0', port=5000)
