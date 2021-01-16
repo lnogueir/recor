@@ -13,9 +13,12 @@ from datetime import datetime
 
 @socketio.on('connect')
 def connect_handler():
-  username = request.args.get('name')
-  r = models.Participant(username, session.get('roomId', None), datetime.now())
-  db.session.add(r)
-  db.session.commit()
+  participantName = request.args.get('participantName')
+  if 'participantName' not in session or session['participantName'] != participantName:
+    session['participantName'] = participantName
+    r = models.Participant(participantName, session.get('roomId', None), datetime.now())
+    db.session.add(r)
+    db.session.commit()
+  join_room(session['roomId'])
 
 
