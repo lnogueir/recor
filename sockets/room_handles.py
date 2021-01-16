@@ -19,6 +19,7 @@ def connect_handler():
     r = models.Participant(participantName, session.get('roomId', None), datetime.now())
     db.session.add(r)
     db.session.commit()
+    session['participantId'] = r.id
   join_room(session['roomId'])
 
 
