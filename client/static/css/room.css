@@ -1,0 +1,15 @@
+.message-container{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+.local-stream-container{
+    text-align: center;
+    height: 300px;
+}
+
+.local-stream-container > video {
+    height: 100%;
+}
+
