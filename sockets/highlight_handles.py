@@ -21,9 +21,12 @@ def handle_emotion_from_frame(frame):
 
   visImg = vision.Image(content=imageData)
 
+  print('im here')
+
   response = client.face_detection(image=visImg)
   likelihood_name = ('UNKNOWN', 'VERY_UNLIKELY', 'UNLIKELY', 'POSSIBLE',
                        'LIKELY', 'VERY_LIKELY')
+  print('im here now!')
 
   for face in response.face_annotations:
         print('anger: {}'.format(likelihood_name[face.anger_likelihood]))
