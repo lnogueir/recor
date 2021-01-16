@@ -1,4 +1,6 @@
 let userName = prompt('Enter your name: ');
+const roomId = parseInt(document.querySelector('#roomId').value);
+const socket = io({query: { participantName: userName }});
 
 var recognition = new webkitSpeechRecognition() || SpeechRecognition();
 
@@ -18,8 +20,6 @@ if (typeof recognition === 'undefined') {
   };
 }
 
-const roomId = parseInt(document.querySelector('#roomId').value);
-const socket = io({query: { participantName: userName }});
 
 socket.on('connect', () => {
   console.log('connected just fine');
