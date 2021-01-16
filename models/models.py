@@ -9,8 +9,6 @@ class Room(db.Model):
         self.id = id
         self.created_at = createdAt
 
-
-
 class Participant(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
