@@ -32,3 +32,16 @@ class ChatMessage(db.Model):
         self.created_at = createdAt       
         self.media_url = mediaURL
         self.message = message 
+        
+class TranscriptionMessage(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    transcription = db.Column(db.String)
+    participant_id = db.Column(db.Integer)
+    room_id = db.Column(db.Integer)
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    def __init__(self, transcription, participantId, roomId, createdAt):
+        self.transcription = transcription
+        self.participant_id = participantId
+        self.room_id = roomId
+        self.created_at = createdAt
+        

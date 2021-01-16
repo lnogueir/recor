@@ -2,60 +2,38 @@ let userName = prompt('Enter your name: ');
 const roomId = parseInt(document.querySelector('#roomId').value);
 const socket = io({query: { participantName: userName }});
 var socketIsReady = false;
-var recognition = new webkitSpeechRecognition() || SpeechRecognition();
-
-if (typeof recognition === 'undefined') {
-  alert('Browser not supported')
-} else {
-
-  socket.on('connect', () => {
-    socketIsReady = true;
-    recognition.continuous = true;
-    recognition.lang = 'en';
-
-    recognition.onresult = function(event) {
-      var transcription = '';
-      for (var i = event.resultIndex; i < event.results.length; ++i) {
-        transcription += event.results[i][0].transcript;
-      }
-      
-      console.log(transcription);
-    };
-  });
-  
-  socket.on('disconnect', () => {
-    recognition.stop()
-  })
-  // captureLoop()
-}
-
+let emotionsInterval = null;
+let recognition;
 let janus;
 
-navigator.mediaDevices.getUserMedia({audio: true, video: true})
-.then((stream) => {
-
-  recognition.start();
-
-  Janus.init({
-    debug: 'all',
-    callback() {
-      janus = new Janus({
-        server: 'http://localhost:8088/janus',
-        iceServers: [
-          { url: 'stun:stun.l.google.com:19302' },
-          { url: 'stun:stun1.l.google.com:19302' },
-          { url: 'stun:stun2.l.google.com:19302' },
-        ],
-        success() {
-          publishStream(stream);
-        },
-      });
-    },
+socket.on('connect', () => {
+  socketIsReady = true;
+  
+  navigator.mediaDevices.getUserMedia({audio: true, video: true})
+  .then((stream) => {
+    beginRecognition();
+    Janus.init({
+      callback() {
+        janus = new Janus({
+          server: 'http://localhost:8088/janus',
+          iceServers: [
+            { url: 'stun:stun.l.google.com:19302' },
+            { url: 'stun:stun1.l.google.com:19302' },
+            { url: 'stun:stun2.l.google.com:19302' },
+          ],
+          success() {
+            publishStream(stream);
+          },
+        });
+      },
+    });
+  })
+  .catch(() => {
+    alert('Media constraints not satisfied.')
   });
-})
-.catch(() => {
-  alert('Media constraints not satisfied.')
+
 });
+  
 
 function joinFeed(publishers){
   publishers.forEach((publisher) => {
@@ -109,12 +87,37 @@ function joinFeed(publishers){
           const participatsVideosDiv = document.querySelector('#participants-video');
           participatsVideosDiv.appendChild(newParticipantVideo);
           $(participatsVideosDiv).children().each(function () {
-            console.log(this);
+            if (this.srcObject && !this.srcObject.active) {
+              $(this).remove();
+            }
           })
+
         }
       });
     }
   });
+}
+
+function beginRecognition() {
+  recognition = new webkitSpeechRecognition() || SpeechRecognition();
+  if (typeof recognition === 'undefined') {
+    alert('Recor does not support this browser')
+  } else {
+    recognition.continuous = true;
+    recognition.lang = 'en';
+    recognition.onend = beginRecognition
+    recognition.onresult = function(event) {
+      var transcription = '';
+      for (var i = event.resultIndex; i < event.results.length; ++i) {
+        transcription += event.results[i][0].transcript;
+      }
+      
+      socket.emit('transcription', transcription);
+      console.log(transcription);
+    };
+  
+    recognition.start();
+  }
 }
 
 function publishStream(stream) {
@@ -130,6 +133,10 @@ function publishStream(stream) {
       });
     },
     onmessage(feedMsg, feedJsep) {
+      if (typeof feedMsg.leaving !== 'undefined') {
+        $(`#${feedMsg.leaving}`).remove();
+      } 
+
       if (feedJsep && feedJsep.type === 'answer') {
         feedHandle.handleRemoteJsep({ jsep: feedJsep });
       }
@@ -163,27 +170,19 @@ function publishStream(stream) {
       }
     },
     onlocalstream(localStream) {
-        // clearInterval
+        // clearInterval(emotionsInterval)
         const localVideo = document.getElementById('local-stream');
-        localVideo.srcObject = localStream;
-        // captureLoop()
-        // begin emotion requests
-    },
-    webrtcState(isConnected) {
-      console.log('webrtc state:', isConnected)
+        localToDisplay = new MediaStream();
+        const videoTrack = localStream.getVideoTracks()[0];
+        localToDisplay.addTrack(videoTrack);
+        localVideo.srcObject = localToDisplay;
+        // emotionsInterval = setInterval(async () => {
+        //   imgCaptured= await capture()
+        //   emit('emotion', imgCaptured)
+        // }, 2000)
     },
   });
 }
-
-
-async function captureLoop(){
-  imgCaptured= await capture()
-  // console.log(imgCaptured)
-  socket.emit('emotion',imgCaptured)
-
-  setTimeout(await captureLoop, 2000);
-}
-
 
 async function capture() {
   var canvas = document.querySelector('canvas');

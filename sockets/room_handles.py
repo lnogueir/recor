@@ -31,4 +31,6 @@ def message_handler(message):
   
   return 1
 
-  
+@socketio.on('transcription')
+def transcription_handler(transcription):
+  print(transcription)
