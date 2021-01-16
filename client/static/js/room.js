@@ -204,7 +204,7 @@ async function sendMessage(){
   if(socketIsReady){
     const message = messageInput.value
     const fileInput =  document.getElementById('file-input');
-    if(fileInput.files.length>0){
+    if(fileInput.files.length > 0){
       var blob = fileInput.files[0]; 
       var reader = new FileReader();
       reader.onload = () => {
@@ -216,7 +216,7 @@ async function sendMessage(){
       }
       reader.readAsDataURL(blob);
     } else{
-        socket.emit('sendMessage',message,'',()=>{
+        socket.emit('sendMessage',message,None,()=>{
           messageInput.value = ''
       })
     } 
