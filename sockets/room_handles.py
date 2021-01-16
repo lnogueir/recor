@@ -28,3 +28,7 @@ def connect_handler(message):
     return {'status':200}
   except:
     return {'status':500}  
+
+@socketio.on('transcription')
+def transcription_handler(transcription):
+  print(transcription)
