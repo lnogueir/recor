@@ -4,10 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 
 server = Flask(
-    __name__, 
-    static_url_path='', 
-    static_folder='client/static', 
-    template_folder='client/templates'
+    __name__
 )
 #COCKROACHDB
 server.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('COCKROACH_DB_URL') 
