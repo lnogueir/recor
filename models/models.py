@@ -7,7 +7,7 @@ class Room(db.Model):
     
     def __init__(self, id, createdAt):
         self.id = id
-        self.created_at = createdAt;
+        self.created_at = createdAt
 
 
 
