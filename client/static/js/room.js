@@ -7,7 +7,8 @@ socket.on('connect', () => {
   console.log('connected just fine');
 });
 
-let janus;
+// let janus;
+
 navigator.mediaDevices.getUserMedia({audio: true, video: true})
 .then((stream) => {
   // Janus.init({

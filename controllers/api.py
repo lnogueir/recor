@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request, session
 from app import db
-import datetime
+from datetime import datetime
 import os
 import sys
 
@@ -14,7 +14,7 @@ api = Blueprint('api', __name__)
 def create_room():
   req_data = request.get_json(force=True)
   roomId = req_data['roomId']
-  r = models.Room(roomId, datetime.datetime.now())
+  r = models.Room(roomId, datetime.now())
   db.session.add(r)
   db.session.commit()
   return jsonify(success=True), 200
