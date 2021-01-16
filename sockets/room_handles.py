@@ -21,3 +21,10 @@ def connect_handler():
     session['participantId'] = r.id
   join_room(session['roomId'])   
   
+@socketio.on('sendMessage')
+def connect_handler(message):
+  try:
+    print(message)
+    return {'status':200}
+  except:
+    return {'status':500}  

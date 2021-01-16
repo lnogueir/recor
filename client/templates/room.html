@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" type="text/css" href="/css/video.css">
+  <link rel="stylesheet" type="text/css" href="./css/room.css">
   <title>Room</title>
 </head>
 <body>
@@ -15,8 +15,8 @@
     <canvas width="640" height="480"></canvas>
   </div>
   <div class="message-container">
-    <input type="text">
-    <button>send</button>
+    <input type="text" id='message-input'>
+    <button onclick="sendMessage()">send</button>
   </div>
   <input id="roomId" type="hidden" value="{{roomId}}"/>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.min.js" integrity="sha512-Jq1JnVXlkYQOYQpz31qIV/0l67d97J9I6sbILtfiSYX00Isr2zK7XDRmHW8d2iBTwNZfL7sHkHGT0EzLs90jdw==" crossorigin="anonymous"></script>  
