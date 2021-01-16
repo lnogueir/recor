@@ -112,8 +112,11 @@ function joinFeed(publishers){
           const participatsVideosDiv = document.querySelector('#participants-video');
           participatsVideosDiv.appendChild(newParticipantVideo);
           $(participatsVideosDiv).children().each(function () {
-            console.log(this);
+            if (this.srcObject && !this.srcObject.active) {
+              $(this).remove();
+            }
           })
+
         }
       });
     }
@@ -133,6 +136,10 @@ function publishStream(stream) {
       });
     },
     onmessage(feedMsg, feedJsep) {
+      if (typeof feedMsg.leaving !== 'undefined') {
+        $(`#${feedMsg.leaving}`).remove();
+      } 
+      
       if (feedJsep && feedJsep.type === 'answer') {
         feedHandle.handleRemoteJsep({ jsep: feedJsep });
       }
