@@ -170,23 +170,24 @@ function publishStream(stream) {
       }
     },
     onlocalstream(localStream) {
-        // clearInterval(emotionsInterval)
+        clearInterval(emotionsInterval);
         const localVideo = document.getElementById('local-stream');
         localToDisplay = new MediaStream();
         const videoTrack = localStream.getVideoTracks()[0];
         localToDisplay.addTrack(videoTrack);
         localVideo.srcObject = localToDisplay;
-        // emotionsInterval = setInterval(async () => {
-        //   imgCaptured= await capture()
-        //   emit('emotion', imgCaptured)
-        // }, 2000)
+
+        emotionsInterval = setInterval(async () => {
+          socket.emit('videoFrame', await captureFrame());
+        }, 4000)
+        
     },
   });
 }
 
-async function capture() {
-  var canvas = document.querySelector('canvas');
-  const video = document.querySelector('local-stream');
+async function captureFrame() {
+  const canvas = document.createElement('canvas');
+  const video = document.querySelector('#local-stream');
   canvas.width = 640;
   canvas.height = 480;
   var ctx = canvas.getContext('2d');
@@ -194,6 +195,7 @@ async function capture() {
   ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
   imageCapture = await canvas.toDataURL("image/jpeg");
+  console.log(imageCapture);
 
   return imageCapture;
 }

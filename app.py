@@ -3,8 +3,6 @@ from flask_socketio import SocketIO
 from flask_sqlalchemy import SQLAlchemy
 import os
 
-
-
 server = Flask(
     __name__, 
     static_url_path='', 
@@ -20,10 +18,12 @@ socketio = SocketIO(server, binary=True)
 
 if __name__ == '__main__':
     server.secret_key = 'super secret key'
-    os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="google_creds.json"
     server.config['SESSION_TYPE'] = 'filesystem'
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="google_creds.json"
+
     
     from sockets import room_handles
+    from sockets import highlight_handles
 
     from controllers.api import api
     from controllers.routes import routes
