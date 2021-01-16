@@ -161,12 +161,36 @@ function publishStream(stream) {
       }
     },
     onlocalstream(localStream) {
-        console.log('received stream');
+        // clearInterval
         const localVideo = document.getElementById('local-stream');
         localVideo.srcObject = localStream;
+        // begin emotion requests
     },
     webrtcState(isConnected) {
       console.log('webrtc state:', isConnected)
     },
   });
+}
+
+
+async function captureLoop(){
+  imgCaptured= await capture()
+  // console.log(imgCaptured)
+  socket.emit('emotion',imgCaptured)
+
+  setTimeout(await captureLoop, 2000);
+}
+
+
+async function capture() {
+  var canvas = document.querySelector('canvas');
+  canvas.width = 640;
+  canvas.height = 480;
+  var ctx = canvas.getContext('2d');
+
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+  imageCapture = await canvas.toDataURL("image/jpeg");
+
+  return imageCapture;
 }
