@@ -18,10 +18,12 @@ services:
     #   volumes:
     #     - ./janus/janus.jcfg:/usr/local/etc/janus/janus.jcfg  # might need to change this later, dk if this is best practice .... TODO  
     #   restart: always
-    app2:
+    app:
       build: ../
       ports:
         - "5000:5000"
+      links:
+        - web-server
       environment:
         - COCKROACH_DB_URL=${COCKROACH_DB_URL}
 
