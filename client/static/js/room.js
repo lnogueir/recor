@@ -1,5 +1,23 @@
 let userName = prompt('Enter your name: ');
 
+var recognition = new webkitSpeechRecognition() || SpeechRecognition();
+
+if (typeof recognition === 'undefined') {
+  alert('Browser not supported')
+} else {
+  recognition.continuous = true;
+  recognition.lang = 'en';
+
+  recognition.onresult = function(event) {
+    var transcription = '';
+    for (var i = event.resultIndex; i < event.results.length; ++i) {
+      transcription += event.results[i][0].transcript;
+    }
+    
+    console.log(transcription);
+  };
+}
+
 const roomId = parseInt(document.querySelector('#roomId').value);
 const socket = io({query: { participantName: userName }});
 
@@ -11,6 +29,9 @@ socket.on('connect', () => {
 
 navigator.mediaDevices.getUserMedia({audio: true, video: true})
 .then((stream) => {
+
+  recognition.start();
+
   // Janus.init({
   //   debug: 'all',
   //   callback() {
