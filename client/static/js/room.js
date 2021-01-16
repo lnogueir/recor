@@ -1,8 +1,6 @@
 let userName = prompt('Enter your name: ');
 const roomId = parseInt(document.querySelector('#roomId').value);
 const socket = io({query: { participantName: userName }});
-const video = document.querySelector('local-stream');
-const messageInput = document.getElementById('message-input');
 var socketIsReady = false;
 var recognition = new webkitSpeechRecognition() || SpeechRecognition();
 
@@ -189,6 +187,7 @@ async function captureLoop(){
 
 async function capture() {
   var canvas = document.querySelector('canvas');
+  const video = document.querySelector('local-stream');
   canvas.width = 640;
   canvas.height = 480;
   var ctx = canvas.getContext('2d');
@@ -200,19 +199,30 @@ async function capture() {
   return imageCapture;
 }
 
-function sendMessage(){
+async function sendMessage(){
+  const messageInput = document.getElementById('message-input');
+
   if(socketIsReady){
     const message = messageInput.value
-    socket.emit('sendMessage',message,(resp)=>{
-      if(resp['status']==200){
-        console.log('Message sent with success')
-        messageInput.value = ''
-      } else{
-        console.log('Error')
-        messageInput.value = ''
+    const fileInput =  document.getElementById('file-input');
+    if(fileInput.files.length>0){
+      var blob = fileInput.files[0]; 
+      var reader = new FileReader();
+      reader.onload = () => {
+        console.log(reader.result)
+        socket.emit('sendMessage',message,reader.result,()=>{
+            messageInput.value = ''
+            fileInput.files[0] = ''
+        })    
       }
-    })    
+      reader.readAsDataURL(blob);
+    } else{
+        socket.emit('sendMessage',message,'',()=>{
+          messageInput.value = ''
+      })
+    } 
   }
 }
+
 
 
