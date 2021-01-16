@@ -4,6 +4,7 @@ const socket = io({query: { participantName: userName }});
 const video = document.querySelector('local-stream');
 const messageInput = document.getElementById('message-input');
 var socketIsReady = false;
+let emotionsInterval = null;
 var recognition = new webkitSpeechRecognition() || SpeechRecognition();
 
 if (typeof recognition === 'undefined') {
@@ -165,27 +166,19 @@ function publishStream(stream) {
       }
     },
     onlocalstream(localStream) {
-        // clearInterval
+        // clearInterval(emotionsInterval)
         const localVideo = document.getElementById('local-stream');
         localVideo.srcObject = localStream;
-        // captureLoop()
-        // begin emotion requests
+        // emotionsInterval = setInterval(async () => {
+        //   imgCaptured= await capture()
+        //   emit('emotion', imgCaptured)
+        // }, 2000)
     },
     webrtcState(isConnected) {
       console.log('webrtc state:', isConnected)
     },
   });
 }
-
-
-async function captureLoop(){
-  imgCaptured= await capture()
-  // console.log(imgCaptured)
-  socket.emit('emotion',imgCaptured)
-
-  setTimeout(await captureLoop, 2000);
-}
-
 
 async function capture() {
   var canvas = document.querySelector('canvas');
