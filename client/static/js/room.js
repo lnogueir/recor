@@ -112,7 +112,7 @@ function beginRecognition() {
         transcription += event.results[i][0].transcript;
       }
       
-      socket.emit('transcription', transcription);
+      socket.emit('transcriptionMessage', transcription);
       console.log(transcription);
     };
   
@@ -208,16 +208,16 @@ async function sendMessage(){
       var blob = fileInput.files[0]; 
       var reader = new FileReader();
       reader.onload = () => {
-        console.log(reader.result)
-        socket.emit('sendMessage',message,reader.result,()=>{
+        socket.emit('chatMessage', message, reader.result, () => {
             messageInput.value = ''
             fileInput.files[0] = ''
         })    
       }
       reader.readAsDataURL(blob);
     } else{
-        socket.emit('sendMessage',message,None,()=>{
+        socket.emit('chatMessage', message, null, () => {
           messageInput.value = ''
+          fileInput.files[0] = ''
       })
     } 
   }
