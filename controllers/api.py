@@ -1,9 +1,8 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request, session
 from app import db
-import datetime
+from datetime import datetime
 import os
 import sys
-from flask import Blueprint, jsonify, request
 
 parent_dir_name = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append(parent_dir_name)
@@ -11,13 +10,11 @@ from models import models
 
 api = Blueprint('api', __name__)
 
-
 @api.route('/api/createRoom', methods=['POST'])
 def create_room():
   req_data = request.get_json(force=True)
   roomId = req_data['roomId']
-  print(roomId)
-  r = models.Room(roomId, datetime.datetime.now())
+  r = models.Room(roomId, datetime.now())
   db.session.add(r)
-  test = db.session.commit()
-  return jsonify({'redirectUrl': '/test'}), 200
+  db.session.commit()
+  return jsonify(success=True), 200

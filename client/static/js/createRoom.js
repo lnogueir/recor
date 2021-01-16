@@ -17,7 +17,6 @@ function createRoom() {
                     publishers: 8
                   },
                   success(res) {
-                    console.log(res)
                     if (res.videoroom === 'created') {
                       const body = JSON.stringify({ roomId: res.room });
                       fetch('/api/createRoom', {
@@ -31,9 +30,9 @@ function createRoom() {
                         body,
                       }).then((response) => {
                           if (response.status === 200) {
-                            response.json().then((json) => {
-                              // window.location = json.redirectUrl;
-                            });
+                            window.location = `/room/${res.room}`;
+                          } else {
+                            alert('Error creating room. Try again later.');
                           }
                         });
                     }
