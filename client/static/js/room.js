@@ -6,40 +6,35 @@ const messageInput = document.getElementById('message-input');
 var socketIsReady = false;
 let emotionsInterval = null;
 let recognition;
-
-socket.on('connect', () => {
-  socketIsReady = true;
-  
-});
-  
 let janus;
 
-navigator.mediaDevices.getUserMedia({audio: true, video: true})
-.then((stream) => {
+socket.on('connect', () => {
 
- 
-
-  beginRecognition();
-
-  Janus.init({
-    callback() {
-      janus = new Janus({
-        server: 'http://localhost:8088/janus',
-        iceServers: [
-          { url: 'stun:stun.l.google.com:19302' },
-          { url: 'stun:stun1.l.google.com:19302' },
-          { url: 'stun:stun2.l.google.com:19302' },
-        ],
-        success() {
-          publishStream(stream);
-        },
-      });
-    },
+  navigator.mediaDevices.getUserMedia({audio: true, video: true})
+  .then((stream) => {
+    beginRecognition();
+    Janus.init({
+      callback() {
+        janus = new Janus({
+          server: 'http://localhost:8088/janus',
+          iceServers: [
+            { url: 'stun:stun.l.google.com:19302' },
+            { url: 'stun:stun1.l.google.com:19302' },
+            { url: 'stun:stun2.l.google.com:19302' },
+          ],
+          success() {
+            publishStream(stream);
+          },
+        });
+      },
+    });
+  })
+  .catch(() => {
+    alert('Media constraints not satisfied.')
   });
-})
-.catch(() => {
-  alert('Media constraints not satisfied.')
+
 });
+  
 
 function joinFeed(publishers){
   publishers.forEach((publisher) => {
