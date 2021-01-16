@@ -4,7 +4,7 @@ function createRoom() {
     debug: 'all',
     callback() {
       const janus = new Janus({
-        server: 'http://record.tech/janus',
+        server: 'https://record.tech/janus',
         success() {
           // Attach to VideoRoom plugin
           janus.attach(
