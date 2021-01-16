@@ -6,6 +6,13 @@
   <title>Room</title>
 </head>
 <body>
-  
+  <div id="participants-video">
+    <video id="local"></video>
+  </div>
+  <input id="roomId" type="hidden" value="{{roomId}}"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.min.js" integrity="sha512-Jq1JnVXlkYQOYQpz31qIV/0l67d97J9I6sbILtfiSYX00Isr2zK7XDRmHW8d2iBTwNZfL7sHkHGT0EzLs90jdw==" crossorigin="anonymous"></script>  
+  <script type="text/javascript" async defer src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/6.4.0/adapter.min.js"></script>
+  <script src="/js/janus.js"></script>
+  <script src="/js/room.js"></script>
 </body>
 </html>

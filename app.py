@@ -22,6 +22,8 @@ if __name__ == '__main__':
     server.secret_key = 'super secret key'
     server.config['SESSION_TYPE'] = 'filesystem'
     
+    from sockets import room_handles
+
     from controllers.api import api
     from controllers.routes import routes
 
