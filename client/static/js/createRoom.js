@@ -20,8 +20,16 @@ function createRoom() {
                     console.log(res)
                     if (res.videoroom === 'created') {
                       const body = JSON.stringify({ roomId: res.room });
-                      fetch('/api/createRoom')
-                        .then((response) => {
+                      fetch('/api/createRoom', {
+                        method: 'POST',
+                        mode: 'cors',
+                        cache: 'no-cache',
+                        credentials: 'same-origin',
+                        headers: {
+                          'Content-Type': 'application/json',
+                        },
+                        body,
+                      }).then((response) => {
                           if (response.status === 200) {
                             response.json().then((json) => {
                               // window.location = json.redirectUrl;
