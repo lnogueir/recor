@@ -13,8 +13,11 @@ socketio = SocketIO(server, binary=True)
 if __name__ == '__main__':
     server.secret_key = 'super secret key'
     server.config['SESSION_TYPE'] = 'filesystem'
-
+    
+    from controllers.api import api
     from controllers.routes import routes
+
+    server.register_blueprint(api)
     server.register_blueprint(routes)
 
     socketio.run(server, debug=True)
