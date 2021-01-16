@@ -21,16 +21,15 @@ def connect_handler():
     session['participantId'] = r.id
   join_room(session['roomId'])   
   
-@socketio.on('sendMessage')
+@socketio.on('chatMessage')
 def message_handler(message):
   print(message)
   print(session)
   r = models.ChatMessage(session.get('participantId',None), session.get('roomId', None), datetime.now(),'TEST_URL',message)
   db.session.add(r)
   db.session.commit()
-  
   return 1
 
-@socketio.on('transcription')
+@socketio.on('transcriptionMessage')
 def transcription_handler(transcription):
   print(transcription)
