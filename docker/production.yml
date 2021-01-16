@@ -19,6 +19,9 @@ services:
       volumes:
         - ./janus/janus.jcfg:/usr/local/etc/janus/janus.jcfg  # might need to change this later, dk if this is best practice .... TODO  
       restart: always
+      depends_on:
+        - web-server
+        - janus
     app:
       build: ../
       ports:
