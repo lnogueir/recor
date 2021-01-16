@@ -9,16 +9,17 @@ server = Flask(
     static_folder='client/static', 
     template_folder='client/templates'
 )
-
-server.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('COCKROACH_DB_URL')
-
+#COCKROACHDB
+server.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('COCKROACH_DB_URL') 
 db = SQLAlchemy(server)
+
 
 socketio = SocketIO(server, binary=True)
 
 if __name__ == '__main__':
     server.secret_key = 'super secret key'
     server.config['SESSION_TYPE'] = 'filesystem'
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="google_creds.json"
 
     
     from sockets import room_handles
