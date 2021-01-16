@@ -1,64 +1,39 @@
 let userName = prompt('Enter your name: ');
 const roomId = parseInt(document.querySelector('#roomId').value);
 const socket = io({query: { participantName: userName }});
-const video = document.querySelector('local-stream');
-const messageInput = document.getElementById('message-input');
 var socketIsReady = false;
 let emotionsInterval = null;
-var recognition = new webkitSpeechRecognition() || SpeechRecognition();
-
-if (typeof recognition === 'undefined') {
-  alert('Browser not supported')
-} else {
-
-  socket.on('connect', () => {
-    socketIsReady = true;
-    recognition.continuous = true;
-    recognition.lang = 'en';
-
-    recognition.onresult = function(event) {
-      var transcription = '';
-      for (var i = event.resultIndex; i < event.results.length; ++i) {
-        transcription += event.results[i][0].transcript;
-      }
-      
-      console.log(transcription);
-    };
-  });
-  
-  socket.on('disconnect', () => {
-    recognition.stop()
-  })
-  // captureLoop()
-}
-
+let recognition;
 let janus;
 
-navigator.mediaDevices.getUserMedia({audio: true, video: true})
-.then((stream) => {
-
-  recognition.start();
-
-  Janus.init({
-    debug: 'all',
-    callback() {
-      janus = new Janus({
-        server: 'http://localhost:8088/janus',
-        iceServers: [
-          { url: 'stun:stun.l.google.com:19302' },
-          { url: 'stun:stun1.l.google.com:19302' },
-          { url: 'stun:stun2.l.google.com:19302' },
-        ],
-        success() {
-          publishStream(stream);
-        },
-      });
-    },
+socket.on('connect', () => {
+  socketIsReady = true;
+  
+  navigator.mediaDevices.getUserMedia({audio: true, video: true})
+  .then((stream) => {
+    beginRecognition();
+    Janus.init({
+      callback() {
+        janus = new Janus({
+          server: 'http://localhost:8088/janus',
+          iceServers: [
+            { url: 'stun:stun.l.google.com:19302' },
+            { url: 'stun:stun1.l.google.com:19302' },
+            { url: 'stun:stun2.l.google.com:19302' },
+          ],
+          success() {
+            publishStream(stream);
+          },
+        });
+      },
+    });
+  })
+  .catch(() => {
+    alert('Media constraints not satisfied.')
   });
-})
-.catch(() => {
-  alert('Media constraints not satisfied.')
+
 });
+  
 
 function joinFeed(publishers){
   publishers.forEach((publisher) => {
@@ -123,6 +98,28 @@ function joinFeed(publishers){
   });
 }
 
+function beginRecognition() {
+  recognition = new webkitSpeechRecognition() || SpeechRecognition();
+  if (typeof recognition === 'undefined') {
+    alert('Recor does not support this browser')
+  } else {
+    recognition.continuous = true;
+    recognition.lang = 'en';
+    recognition.onend = beginRecognition
+    recognition.onresult = function(event) {
+      var transcription = '';
+      for (var i = event.resultIndex; i < event.results.length; ++i) {
+        transcription += event.results[i][0].transcript;
+      }
+      
+      socket.emit('transcriptionMessage', transcription);
+      console.log(transcription);
+    };
+  
+    recognition.start();
+  }
+}
+
 function publishStream(stream) {
   let feedHandle;
   janus.attach({
@@ -139,7 +136,7 @@ function publishStream(stream) {
       if (typeof feedMsg.leaving !== 'undefined') {
         $(`#${feedMsg.leaving}`).remove();
       } 
-      
+
       if (feedJsep && feedJsep.type === 'answer') {
         feedHandle.handleRemoteJsep({ jsep: feedJsep });
       }
@@ -175,20 +172,21 @@ function publishStream(stream) {
     onlocalstream(localStream) {
         // clearInterval(emotionsInterval)
         const localVideo = document.getElementById('local-stream');
-        localVideo.srcObject = localStream;
+        localToDisplay = new MediaStream();
+        const videoTrack = localStream.getVideoTracks()[0];
+        localToDisplay.addTrack(videoTrack);
+        localVideo.srcObject = localToDisplay;
         // emotionsInterval = setInterval(async () => {
         //   imgCaptured= await capture()
         //   emit('emotion', imgCaptured)
         // }, 2000)
-    },
-    webrtcState(isConnected) {
-      console.log('webrtc state:', isConnected)
     },
   });
 }
 
 async function capture() {
   var canvas = document.querySelector('canvas');
+  const video = document.querySelector('local-stream');
   canvas.width = 640;
   canvas.height = 480;
   var ctx = canvas.getContext('2d');
@@ -200,19 +198,30 @@ async function capture() {
   return imageCapture;
 }
 
-function sendMessage(){
+async function sendMessage(){
+  const messageInput = document.getElementById('message-input');
+
   if(socketIsReady){
     const message = messageInput.value
-    socket.emit('sendMessage',message,(resp)=>{
-      if(resp['status']==200){
-        console.log('Message sent with success')
-        messageInput.value = ''
-      } else{
-        console.log('Error')
-        messageInput.value = ''
+    const fileInput =  document.getElementById('file-input');
+    if(fileInput.files.length > 0){
+      var blob = fileInput.files[0]; 
+      var reader = new FileReader();
+      reader.onload = () => {
+        socket.emit('chatMessage', message, reader.result, () => {
+            messageInput.value = ''
+            fileInput.files[0] = ''
+        })    
       }
-    })    
+      reader.readAsDataURL(blob);
+    } else{
+        socket.emit('chatMessage', message, null, () => {
+          messageInput.value = ''
+          fileInput.files[0] = ''
+      })
+    } 
   }
 }
+
 
 
