@@ -9,7 +9,7 @@ services:
         # - ./letsencrypt:/etc/letsencrypt
         - ../static:/home/app/web/project/static
         - ./nginx.conf:/etc/nginx/nginx.conf
-    janus-gateway:
+    janus:
       image: canyan/janus-gateway:master_88df9449ac54f27afa29672cf092fac65a695c29
       links:
         - web-server
@@ -19,9 +19,6 @@ services:
       volumes:
         - ./janus/janus.jcfg:/usr/local/etc/janus/janus.jcfg  # might need to change this later, dk if this is best practice .... TODO  
       restart: always
-      depends_on:
-        - web-server
-        - janus
     app:
       build: ../
       ports:
@@ -30,6 +27,7 @@ services:
         - web-server
       depends_on:
         - web-server
+        - janus
       environment:
         - COCKROACH_DB_URL=${COCKROACH_DB_URL}
 
