@@ -1,5 +1,8 @@
 from flask import Flask
 from flask_socketio import SocketIO
+from flask_sqlalchemy import SQLAlchemy
+
+
 
 server = Flask(
     __name__, 
@@ -7,6 +10,9 @@ server = Flask(
     static_folder='client/static', 
     template_folder='client/templates'
 )
+
+server.config['SQLALCHEMY_DATABASE_URI'] = 'cockroachdb://jawad:JawadLucasMullerLagan@free-tier.gcp-us-central1.cockroachlabs.cloud:26257/scaly-puma-234.defaultdb?sslmode=require'
+db = SQLAlchemy(server)
 
 socketio = SocketIO(server, binary=True)
 
