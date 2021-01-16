@@ -15,6 +15,8 @@ class Participant(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     room_id = db.Column(db.Integer)
-    def __init__(self, name, roomId):
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    def __init__(self, name, roomId, createdAt):
         self.name = name
-        self.room_id = roomId; 
+        self.room_id = roomId
+        self.created_at = createdAt
