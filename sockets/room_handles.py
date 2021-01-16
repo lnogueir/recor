@@ -4,4 +4,4 @@ from __main__ import socketio
 
 @socketio.on('connect')
 def connect_handler():
-  print('Hello World')
+  print(request.args)

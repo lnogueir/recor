@@ -1,15 +1,11 @@
 let userName = prompt('Enter your name: ');
 
 const roomId = parseInt(document.querySelector('#roomId').value);
-const socket = io({ query: `id=${roomId}` });
+const socket = io({query: { name: userName }});
 
 socket.on('connect', () => {
   console.log('connected just fine');
 });
-
-// const url = window.location.pathname;
-// const lastSlash = url.lastIndexOf('/');
-// const roomId = url.substr(lastSlash + 1);
 
 // let janus;
 
