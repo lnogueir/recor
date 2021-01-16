@@ -13,7 +13,7 @@ server.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('COCKROACH_DB_URL')
 
 db = SQLAlchemy(server)
 
-socketio = SocketIO(server, binary=True)
+socketio = SocketIO(server, binary=True, cors_allowed_origins='*')
 
 if __name__ == '__main__':
     server.secret_key = 'super secret key'
