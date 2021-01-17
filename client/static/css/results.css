@@ -1,0 +1,48 @@
+body{
+    background: rgb(183,255,240);
+    background: linear-gradient(159deg, rgba(183,255,240,1) 0%, rgba(255,216,171,1) 100%);
+    font-family: 'Montserrat'!important;
+}
+
+.navbar {
+    overflow: hidden;
+    position: absolute; /* Set the navbar to fixed position */
+    top: 0; /* Position the navbar at the top of the page */
+    left:0;
+    width: 100%; /* Full width */
+    height: 200px;
+  }
+.icon{
+    height: 32%;
+    background-color: rgb(255, 255, 255);
+}
+.icon-image{
+    padding-top: 6px;
+    padding-left: 20px;
+}
+.buttons{
+    padding-top: 40px;
+    height: 55%;
+    padding-left:30px
+}
+button{
+    margin-left: 50px;
+}
+.main {
+    padding-top: 200px; /* Add a top margin to avoid content overlay */
+}
+
+.transc-wrapper{
+    background-color: rgb(255,255,255);
+    width:80%;
+    height:900px;
+    margin:0 auto;
+    border-radius:4px;
+}
+
+.transc-title{
+    font-size:25px;
+    font-weight:900;
+    padding-top:30px;
+    padding-left:30px;
+}

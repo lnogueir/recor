@@ -216,7 +216,6 @@ function publishStream(stream) {
               }
               emotion = filterEmotions(emotionObj)
             }
-            // console.log(emotionObj);
             socket.emit('videoEmotions', emotion);
           })
           
