@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,900;1,700&display=swap" rel="stylesheet"> 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="/css/index.css">
-  <title>Home</title>
+  <title>Recor</title>
 </head>
 <body>
   
@@ -30,24 +31,37 @@
     <div class="nav-right-buttons">
       <div onclick="createRoom()" class="create-room-button">Create</div>
     </div>
-  </nav>
-  
-  <div class="wrapper">
-    <div class="text-wrapper">
-      <div class="primary-text">
-        Easily Engage your audience in minutes
+  </div>
+
+  <div class="home-page-section">
+
+    <div class="home-page-section-left">
+      <div class="home-page-headline">
+        COMMUNICATION MADE SIMPLE
       </div>
-      <div class = "secondary-text">
-        Lorem Ipsum 
+
+      <div class="home-page-main-text">
+        <div>Easily engage</div> 
+        <div>your audience</div>
+        <div>in minutes<span style="color: rgb(3, 5, 255);">.</span></div>
       </div>
-      <div class="buttons">
-        <button> Lorem </button>
-        <button> Join a Call </button>
+
+      <div class="home-page-sub-text">
+        <div>Powerful video communication </div>
+        <div>tool for companies of all sizes</div>
+      </div>
+      
+      <div class="home-page-create-button">
+        <div onclick="createRoom()" class="create-room-button">
+          Create New Room
+        </div>
       </div>
     </div>
-    <div class="image-wrapper">
-      <img src="/images/landing_page_graphic.png" alt="" class="f-image">
+
+    <div class="home-page-section-right">
+      <img src="/images/landing_page_graphic.png" width="400"/>
     </div>
+
   </div>
 
   <div id="about" class="about-section">
