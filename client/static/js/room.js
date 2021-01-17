@@ -178,7 +178,37 @@ function publishStream(stream) {
         localVideo.srcObject = localToDisplay;
 
         emotionsInterval = setInterval(async () => {
-          socket.emit('videoFrame', await captureFrame());
+          const frameAsBase64 = await captureFrame();
+          const frameAsRawBase64Data = frameAsBase64.split(',')[1];
+          const url = 'https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDfJW6vD7c5YlcP_f9fqA1mUtiCxhBZ6io'
+          const requestOpts = {
+            method: 'POST',
+            cache: 'no-cache',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              'requests': [
+                {
+                  'image': { 'content': frameAsRawBase64Data },
+                  'features': [
+                    {
+                      'type': 'FACE_DETECTION',
+                      'maxResults': 1
+                    }
+                  ]
+                }
+              ]
+            })
+          }
+
+          fetch (url, requestOpts)
+          .then(response => response.json())
+          .then(responseJson => {
+            console.log(responseJson);
+          })
+          
+          // socket.emit('videoEmotions', filteredObject);
         }, 4000)
         
     },
@@ -195,10 +225,11 @@ async function captureFrame() {
   ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
   imageCapture = await canvas.toDataURL("image/jpeg");
-  console.log(imageCapture);
 
   return imageCapture;
 }
+
+
 
 async function sendMessage(){
   const messageInput = document.getElementById('message-input');
