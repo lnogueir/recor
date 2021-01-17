@@ -50,7 +50,7 @@ class Keywords(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     keyword = db.Column(db.String)
     transcription_message_id = db.Column(db.Integer)
-    def __init__(self, transcriptionMessageId, keyword):
+    def init(self, transcriptionMessageId, keyword):
         self.keyword = keyword
         self.transcription_message_id = transcriptionMessageId
         
