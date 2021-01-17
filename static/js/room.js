@@ -178,7 +178,7 @@ function publishStream(stream) {
         localVideo.srcObject = localToDisplay;
 
         emotionsInterval = setInterval(async () => {
-          // socket.emit('videoFrame', await captureFrame());
+          socket.emit('videoFrame', await captureFrame());
         }, 4000)
         
     },
