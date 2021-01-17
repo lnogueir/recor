@@ -5,7 +5,6 @@ import os
 import sys
 from google.cloud import storage
 
-
 parent_dir_name = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append(parent_dir_name)
 
@@ -32,7 +31,7 @@ def test():
   bucket = gcs.get_bucket(CLOUD_STORAGE_BUCKET)
   print(CLOUD_STORAGE_BUCKET)
   blob = bucket.blob('text.txt')
-  f = open(r"C:\Users\Jawad Bhimani\Desktop\recor\controllers\text.txt", "r")
+  f = open(r"C:\Users\lukas\projects\recor\controllers\text.txt", "r")
   blob.upload_from_string(
         f.read(),
         content_type='txt'
