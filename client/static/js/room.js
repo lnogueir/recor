@@ -91,7 +91,6 @@ function joinFeed(publishers){
               $(this).remove();
             }
           })
-
         }
       });
     }
@@ -229,8 +228,6 @@ async function captureFrame() {
   return imageCapture;
 }
 
-
-
 async function sendMessage(){
   const messageInput = document.getElementById('message-input');
 
@@ -239,16 +236,18 @@ async function sendMessage(){
     const fileInput =  document.getElementById('file-input');
     if(fileInput.files.length > 0){
       var blob = fileInput.files[0]; 
+      var name = blob.name
+
       var reader = new FileReader();
       reader.onload = () => {
-        socket.emit('chatMessage', message, reader.result, () => {
+        socket.emit('chatMessage', message, reader.result,name,() => {
             messageInput.value = ''
             fileInput.files[0] = ''
         })    
       }
       reader.readAsDataURL(blob);
     } else{
-        socket.emit('chatMessage', message, null, () => {
+        socket.emit('chatMessage', message, null,null, () => {
           messageInput.value = ''
           fileInput.files[0] = ''
       })
