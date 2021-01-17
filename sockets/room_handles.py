@@ -1,6 +1,7 @@
 from flask import request, session
 from flask_socketio import emit, join_room, leave_room
 from __main__ import socketio
+from monkeylearn import MonkeyLearn
 from datetime import datetime
 import os
 import sys
@@ -15,6 +16,11 @@ import uuid
 
 #CLOUD STORAGE
 CLOUD_STORAGE_BUCKET = os.environ['CLOUD_STORAGE_BUCKET']
+
+#Monkey Learn
+MONKEY_LEARN_API_KEY = os.environ['MONKEY_LEARN_API_KEY']
+ml = MonkeyLearn(MONKEY_LEARN_API_KEY)
+
 
 @socketio.on('connect')
 def connect_handler():
@@ -76,3 +82,10 @@ def transcription_handler(transcription):
   r = models.TranscriptionMessage(transcription, participantId, roomId, datetime.now())
   db.session.add(r)
   db.session.commit()
+  data = [transcription]
+  result = ml.extractors.extract('ex_YCya9nrn', data)
+  print(result.body)
+
+
+
+

@@ -44,4 +44,13 @@ class TranscriptionMessage(db.Model):
         self.participant_id = participantId
         self.room_id = roomId
         self.created_at = createdAt
+
+
+class Keywords(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    keyword = db.Column(db.String)
+    transcription_message_id = db.Column(db.Integer)
+    def __init__(self, transcriptionMessageId, keyword):
+        self.keyword = keyword
+        self.transcription_message_id = transcriptionMessageId
         
