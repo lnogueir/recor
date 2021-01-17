@@ -94,4 +94,11 @@ def transcription_handler(transcription):
   db.session.commit()
 
 
-
+@socketio.on('videoEmotions')
+def handle_emotions(emotion):
+  participantId = session.get('participantId', None)
+  roomId = session.get('roomId', None)
+  r = models.HighlightsMessage(emotion, participantId, roomId, datetime.now(),None)
+  db.session.add(r)
+  db.session.commit()
+  pass
