@@ -8,11 +8,13 @@ let janus;
 
 socket.on('connect', () => {
   socketIsReady = true;
+  console.log('pica')
   
   navigator.mediaDevices.getUserMedia({audio: true, video: true})
   .then((stream) => {
     beginRecognition();
     Janus.init({
+      debug: 'all',
       callback() {
         janus = new Janus({
           server: 'http://localhost:8088/janus',
@@ -173,6 +175,7 @@ function publishStream(stream) {
         const localVideo = document.getElementById('local-stream');
         localToDisplay = new MediaStream();
         const videoTrack = localStream.getVideoTracks()[0];
+        videoTrack.applyConstraints({width: 1920, height: 1080, aspectRatio: 1.777777778});
         localToDisplay.addTrack(videoTrack);
         localVideo.srcObject = localToDisplay;
 
@@ -204,16 +207,56 @@ function publishStream(stream) {
           fetch (url, requestOpts)
           .then(response => response.json())
           .then(responseJson => {
-            console.log(responseJson);
+            let emotion;
+            if(Object.keys(responseJson.responses[0]).length == 0){
+              emotion = 'AFK'
+            }else{
+              emotionObj = {
+                angerLikelihood: responseJson.responses[0].faceAnnotations[0].angerLikelihood,
+                sorrowLikelihood: responseJson.responses[0].faceAnnotations[0].sorrowLikelihood,
+                surpriseLikelihood: responseJson.responses[0].faceAnnotations[0].surpriseLikelihood,
+                joyLikelihood: responseJson.responses[0].faceAnnotations[0].joyLikelihood
+              }
+              emotion = filterEmotions(emotionObj)
+            }
+            // console.log(emotionObj);
+            socket.emit('videoEmotions', emotion);
           })
           
-          // socket.emit('videoEmotions', filteredObject);
         }, 4000)
         
     },
   });
 }
 
+function filterEmotions(emotionsObj){
+  likelihood_name = ['UNKNOWN', "VERY_UNLIKELY", 'UNLIKELY', 'POSSIBLE',
+                       'LIKELY', 'VERY_LIKELY']
+  emotions_arr = ['ANGER','SORROW','SURPRISE','JOY']
+  var emotionDiag;
+
+  numObj = {
+    anger: likelihood_name.indexOf(emotionsObj.angerLikelihood),
+    sorrow: likelihood_name.indexOf(emotionsObj.sorrowLikelihood),
+    surprise: likelihood_name.indexOf(emotionsObj.surpriseLikelihood),
+    joy: likelihood_name.indexOf(emotionsObj.joyLikelihood)
+  }                     
+  console.log(numObj)
+  if(numObj.joy == 2 && numObj.surprise<=2 && numObj.sorrow<=2){
+    emotionDiag = 'Neutral'
+  } else if(numObj.sorrow>2){
+    emotionDiag = 'Sad'
+  } else if(numObj.joy<=1 && numObj.surprise<=1 && numObj.sorrow<=1){
+    emotionDiag = 'Serious'
+  } else if((numObj.joy>2 && numObj.joy<=4) || (numObj.surprise>2 && numObj.surprise<=4)){
+    emotionDiag = 'Eager'
+  } else if(numObj.joy == 5 && numObj.surprise==5){
+    emotionDiag = 'Joy'
+  } else{
+    emotionDiag = 'Neutral'
+  }
+  return emotionDiag
+}
 async function captureFrame() {
   const canvas = document.createElement('canvas');
   const video = document.querySelector('#local-stream');
@@ -232,7 +275,8 @@ async function sendMessage(){
   const messageInput = document.getElementById('message-input');
 
   if(socketIsReady){
-    const message = messageInput.value
+    const message = messageInput.value;
+    
     const fileInput =  document.getElementById('file-input');
     if(fileInput.files.length > 0){
       var blob = fileInput.files[0]; 
@@ -253,6 +297,13 @@ async function sendMessage(){
       })
     } 
   }
+}
+
+function appendMessage(msg, from) {
+  const messageDiv = document.createElement('div');
+  messageDiv.classList.add('room-chat-message');
+  messageDiv.innerHTML = `<p><b>${from}</b><br/>${msg}</p>`
+  document.querySelector('.messages-container').appendChild(messageDiv);
 }
 
 

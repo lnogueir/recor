@@ -44,4 +44,17 @@ class TranscriptionMessage(db.Model):
         self.participant_id = participantId
         self.room_id = roomId
         self.created_at = createdAt
-        
+
+class HighlightsMessage(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    tag = db.Column(db.String)
+    participant_id = db.Column(db.Integer)
+    room_id = db.Column(db.Integer)
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    media_url = db.Column(db.String)
+    def __init__(self, tag, participantId, roomId, createdAt, mediaUrl):
+        self.tag = tag
+        self.participant_id = participantId
+        self.room_id = roomId
+        self.created_at = createdAt
+        self.media_url = mediaUrl
