@@ -77,6 +77,7 @@ def message_handler(message, imageData,name):
 
 @socketio.on('transcriptionMessage')
 def transcription_handler(transcription):
+  print("i am here")
   participantId = session.get('participantId', None)
   roomId = session.get('roomId', None)
   r = models.TranscriptionMessage(transcription, participantId, roomId, datetime.now())
