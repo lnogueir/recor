@@ -8,11 +8,13 @@ let janus;
 
 socket.on('connect', () => {
   socketIsReady = true;
+  console.log('pica')
   
   navigator.mediaDevices.getUserMedia({audio: true, video: true})
   .then((stream) => {
     beginRecognition();
     Janus.init({
+      debug: 'all',
       callback() {
         janus = new Janus({
           server: 'http://localhost:8088/janus',
@@ -173,6 +175,7 @@ function publishStream(stream) {
         const localVideo = document.getElementById('local-stream');
         localToDisplay = new MediaStream();
         const videoTrack = localStream.getVideoTracks()[0];
+        videoTrack.applyConstraints({width: 1920, height: 1080, aspectRatio: 1.777777778});
         localToDisplay.addTrack(videoTrack);
         localVideo.srcObject = localToDisplay;
 
@@ -271,7 +274,8 @@ async function sendMessage(){
   const messageInput = document.getElementById('message-input');
 
   if(socketIsReady){
-    const message = messageInput.value
+    const message = messageInput.value;
+    
     const fileInput =  document.getElementById('file-input');
     if(fileInput.files.length > 0){
       var blob = fileInput.files[0]; 
@@ -292,6 +296,13 @@ async function sendMessage(){
       })
     } 
   }
+}
+
+function appendMessage(msg, from) {
+  const messageDiv = document.createElement('div');
+  messageDiv.classList.add('room-chat-message');
+  messageDiv.innerHTML = `<p><b>${from}</b><br/>${msg}</p>`
+  document.querySelector('.messages-container').appendChild(messageDiv);
 }
 
 

@@ -134,3 +134,35 @@ body{
     height: 100vh;
     margin: 20px auto;
 }
+
+.about-section-content{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.about-section-content p {
+    text-align: left;
+    margin: 0;
+}
+
+.about-section-main-text {
+    font-weight: 900;
+    font-size: 2.5rem;
+}
+
+p.about-section-sub-text {
+    font-weight: 500;
+    font-size: 1.2rem;
+    opacity: 0.5;
+    margin-top: 10px;
+}
+
+.about-section-graphic{
+    text-align: center;
+}
+
+.about-section-graphic img {
+    width: 75%;
+}

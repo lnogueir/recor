@@ -9,27 +9,26 @@
   <title>Home</title>
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-      <a class="navbar-brand" href="#"><img src="/images/Untitled_Artwork_10.png" width="30px" height="30px" alt=""></a>
-      <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-        <li class="nav-item active">
-          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" href="#">Disabled</a>
-        </li>
-      </ul>
-      <button onclick="createRoom()" class="create">
-        Create Room
-      </button>
-      
+  
+  <div class="navbar-main-page">
+    <div class="logo-container">
+      <img src="/images/logo.png" height="80"/>
+    </div>
+
+    <div class="nav-middle-buttons">
+      <div class="nav-middle-button">
+          <span class="active">Home</span>
+      </div>
+      <div class="nav-middle-button">
+          <span id="about-anchor">About</span>
+      </div>
+      <div class="nav-middle-button">
+          <span>Live Features</span>
+      </div>
+    </div>
+
+    <div class="nav-right-buttons">
+      <div onclick="createRoom()" class="create-room-button">Create</div>
     </div>
   </nav>
   
@@ -50,8 +49,39 @@
       <img src="/images/landing_page_graphic.png" alt="" class="f-image">
     </div>
   </div>
-  <script type="text/javascript" async defer src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/6.4.0/adapter.min.js"></script>
+
+  <div id="about" class="about-section">
+    <div class="about-section-content">
+      <p class="about-section-main-text">
+        Our mission is to help transform your<br/>
+        virtual meetings by providing in-depth<br/> 
+        analysis with a timeline.
+      </p>
+
+      <p class="about-section-sub-text">
+        Recor allows individuals to seamlessly analyze data after conferences. Our unique <br/> 
+        features include a full transcription timeline, emotion tracking and meeting highlights. <br/>
+        Check out all sorts of interesting statistics about your meeting such as most keywords<br/>
+        used, graphs of participants interactions and many more!<br/>
+      </p>
+      <div class="about-section-graphic">
+        <img src="/images/About_page_graphic_constructed.png"/>
+      </div>
+    </div>
+
+  </div>
+  
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/6.4.0/adapter.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
   <script src="/js/janus.js"></script>
   <script src="/js/createRoom.js"></script>
+
+  <script>
+    $('#about-anchor').click(function () {
+      $('html, body').animate({
+        scrollTop: $('#about').offset().top - 20
+      }, 1000);
+    })
+  </script>
 </body>
 </html>

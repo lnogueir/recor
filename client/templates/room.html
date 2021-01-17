@@ -4,26 +4,69 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="/css/room.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet"> 
+  <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+      integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+      crossorigin="anonymous"
+    />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Room</title>
 </head>
 <body>
-  <h1>Room: {{roomId}}</h1>
-  <div>
-    <h1>Participants:</h1>
-    <div id="participants-video">
+  <div class="room-container">
+    <div class="room-left">
+      <div class="room-header">
+        <div class="logo-container">
+          <img src="/images/logo.png" height="60"/>
+        </div>
+        <div class="room-header-block">
+          <div>
+            <div style="font-weight: bold; font-size: 1.4rem;">Meeting Room</div>
+            <div style="opacity: 0.5; font-size: 0.7;"> #{{roomId}} </div>
+          </div>
+          <div class="room-header-buttons">
+            <div>
+              <img style="position: relative; right: 15px; cursor: pointer" src="/images/exit.png" height="30px"/>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="local-stream-container">
+          <video autoplay id="local-stream"></video>
+          <div class="participants-video-container">
+            <div id="participants-video">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="room-right">
+      <div class="room-right-content">
+        <div style="font-weight: bold;">
+          Chat
+        </div>
+        <div class="messages-container">
+        </div>
+        <div class="text-input-container">
+          <input type="file" name="file-input" id="file-input" class="inputfile" />
+          <label for="file-input">
+            <i class="fas fa-paperclip"></i>
+          </label>
+          <input autocomplete="off" spellcheck="false" type="text" id="message-input">
+          <button onclick="sendMessage()" type="submit" id="send-button"><i class="fas fa-chevron-right"></i></button>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="local-stream-container">
-    <video autoplay id="local-stream"></video>
-  </div>
-
-  <div class="message-container">
-    <input type="text" id='message-input'>
-    <button onclick="sendMessage()">send</button>
-    <input type="file" id="file-input" name="file-input">
-  </div>
   <input id="roomId" type="hidden" value="{{roomId}}"/>
+  <input id="participantName" type="hidden" value="{{participantName}}"/>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.min.js" integrity="sha512-Jq1JnVXlkYQOYQpz31qIV/0l67d97J9I6sbILtfiSYX00Isr2zK7XDRmHW8d2iBTwNZfL7sHkHGT0EzLs90jdw==" crossorigin="anonymous"></script>  
   <script type="text/javascript" async defer src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/6.4.0/adapter.min.js"></script>
