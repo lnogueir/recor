@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request, session
+from flask import Blueprint, jsonify, request, session, render_template
 from app import db
 from datetime import datetime
 import os
@@ -40,6 +40,19 @@ def test():
   print(blob.public_url)
 
   return jsonify(success=True), 200
+
+@api.route('/api/endLecture', methods=["GET"])
+def end_lecture():
+  # roomId = session.get('roomId', None)
+  roomId = 5042464468652133 
+  room = db.session.query(models.Room).filter(models.Room.id == roomId).first()
+  participants = db.session.query(models.Participant).filter(models.Participant.room_id == roomId).all()
+  print(participants)
+
+
+  return render_template('index.html')
+
+
 
 
 
