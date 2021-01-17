@@ -241,10 +241,8 @@ function filterEmotions(emotionsObj){
     joy: likelihood_name.indexOf(emotionsObj.joyLikelihood)
   }                     
   console.log(numObj)
-  if(numObj.joy == 2 && numObj.surprise<=2 && numObj.sorrow<=2){
+  if(numObj.joy <= 2 && numObj.surprise<=2 && numObj.sorrow<=2){
     emotionDiag = 'Neutral'
-  } else if(numObj.sorrow>2){
-    emotionDiag = 'Sad'
   } else if(numObj.joy<=1 && numObj.surprise<=1 && numObj.sorrow<=1){
     emotionDiag = 'Serious'
   } else if((numObj.joy>2 && numObj.joy<=4) || (numObj.surprise>2 && numObj.surprise<=4)){
