@@ -11,6 +11,7 @@ from models import models
 from app import db
 from google.cloud import storage
 import base64
+import uuid 
 
 #CLOUD STORAGE
 CLOUD_STORAGE_BUCKET = os.environ['CLOUD_STORAGE_BUCKET']
@@ -40,7 +41,7 @@ def message_handler(message, imageData,name):
     image_types = ['jpeg','png','gif']
     file_types = ['zip','pdf']
     if fileType in image_types:
-      blob = bucket.blob(str(filteredName)+'.'+str(fileType))
+      blob = bucket.blob(str(filteredName)+str(uuid.uuid1())+'.'+str(fileType))
       blob.upload_from_string(
             decoded,
             content_type='image/'+str(fileType)
@@ -50,7 +51,7 @@ def message_handler(message, imageData,name):
       print(link)
 
     elif fileType in file_types:
-      blob = bucket.blob(str(filteredName)+'.'+str(fileType))
+      blob = bucket.blob(str(filteredName)+str(uuid.uuid1())+'.'+str(fileType))
       blob.upload_from_string(
             decoded,
             content_type='application/'+str(fileType)
