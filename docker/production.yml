@@ -30,6 +30,7 @@ services:
         - janus
       environment:
         - COCKROACH_DB_URL=${COCKROACH_DB_URL}
+        - CLOUD_STORAGE_BUCKET=${CLOUD_STORAGE_BUCKET}
 
 
     
