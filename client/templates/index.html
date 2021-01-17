@@ -21,7 +21,7 @@
           <span class="active">Home</span>
       </div>
       <div class="nav-middle-button">
-          <span>About</span>
+          <span id="about-anchor">About</span>
       </div>
       <div class="nav-middle-button">
           <span>Live Features</span>
@@ -64,25 +64,38 @@
 
   </div>
 
-  <div class="about-section">
-    <div>
-      <p>
-        Our mission is to simulate a live meeting. <br/>
-        Powerful video comunication tool for <br/>
-        companies of all sizes
+  <div id="about" class="about-section">
+    <div class="about-section-content">
+      <p class="about-section-main-text">
+        Our mission is to help transform your<br/>
+        virtual meetings by providing in-depth<br/> 
+        analysis with a timeline.
       </p>
 
-      <p>
-        PowerfuPowerful video comunication tool for <br/>
-        companies of all sizes Powerful video comunication tool for <br/>
-        companies of all sizes
+      <p class="about-section-sub-text">
+        Recor allows individuals to seamlessly analyze data after conferences. Our unique <br/> 
+        features include a full transcription timeline, emotion tracking and meeting highlights. <br/>
+        Check out all sorts of interesting statistics about your meeting such as most keywords<br/>
+        used, graphs of participants interactions and many more!<br/>
       </p>
+      <div class="about-section-graphic">
+        <img src="/images/About_page_graphic_constructed.png"/>
+      </div>
     </div>
 
   </div>
   
-  <script type="text/javascript" async defer src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/6.4.0/adapter.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/6.4.0/adapter.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
   <script src="/js/janus.js"></script>
   <script src="/js/createRoom.js"></script>
+
+  <script>
+    $('#about-anchor').click(function () {
+      $('html, body').animate({
+        scrollTop: $('#about').offset().top - 20
+      }, 1000);
+    })
+  </script>
 </body>
 </html>
