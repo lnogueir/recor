@@ -1,0 +1,28 @@
+body{
+    font-family: 'Montserrat'!important;
+    height:100vh !important;
+    width:100%;
+    height: 100%;
+}
+.primary-text{
+    
+}
+
+.wrapper{
+    display: flex;
+    flex-direction: row;
+    padding-top: 100px;
+}
+
+.text-wrapper{
+    width:40%;
+}
+
+.image-wrapper{
+    width:60%;
+    height: 40%;
+}
+
+.f-image{
+    height:200px
+}
